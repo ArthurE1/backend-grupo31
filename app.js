@@ -21,6 +21,11 @@ app.use(express.json()); // Parseo de JSON
 // Sirve la carpeta 'uploads' para los archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// RUTA RAÍZ
+app.get('/', (req, res) => {
+    res.send('¡Bienvenido al backend del grupo 31!');
+});
+
 // RUTAS DE CONTACTOS
 app.use('/contactos', ContactsRoutes);
 
