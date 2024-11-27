@@ -8,7 +8,7 @@ const path = require('path');
 
 // Configuración de CORS
 var corsOptions = {
-  origin: '*', // Cambia '*' por la URL de tu frontend si quieres restringirlo
+  origin: '*',  // Cambia '*' por la URL de tu frontend si quieres restringirlo
   optionsSuccessStatus: 200
 };
 
