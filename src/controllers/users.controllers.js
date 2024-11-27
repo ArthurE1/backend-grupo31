@@ -16,18 +16,23 @@ const createUser = async (req, res) => {
             tenant_id: 1
         });
 
-
-
-
         res.status(201).send({
-            status: "se creó correctamente",
-            message: "usuario creado correctamente"
+            status: "Usuario creado correctamente",
+            message: "El usuario ha sido registrado con éxito."
         });
     } catch (error) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).send({
+                status: "Error",
+                message: "El correo electrónico ya está registrado. Por favor, usa otro correo.",
+                error: error.errors[0].message
+            });
+        }
+
         console.log(error);
         res.status(400).send({
             status: "NO SE CREÓ EL usuario",
-            message: "usuario NO CREADO",
+            message: "Hubo un error al crear el usuario.",
             error: error
         });
     }
@@ -37,7 +42,7 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
     const { username, password } = req.body;
 
-    console.log(username, password)
+    console.log(username, password);
 
     // Validación de entrada: asegurarse de que username y password estén presentes
     if (!username || !password) {
@@ -47,7 +52,7 @@ const login = async (req, res) => {
     try {
         // Buscar usuario en la base de datos
         const user = await User.findOne({ where: { username: "juany2kk" } });
-        console.log(user)
+        console.log(user);
 
         if (!user) {
             return res.status(401).json({ message: 'Usuario no encontrado' });
