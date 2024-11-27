@@ -1,37 +1,37 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 require('dotenv').config();
-const cors = require('cors');
-const path = require('path'); // Importar path para manejar rutas
-
-const port = process.env.PORT;
-
-// RUTAS
-const ContactsRoutes = require('./src/routes/contacts.routes');
 const UsersRoutes = require('./src/routes/users.routes');
+const ContactsRoutes = require('./src/routes/contacts.routes');
+const path = require('path');
 
+// Configuración de CORS
 var corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200
+  origin: '*', // Cambia '*' por la URL de tu frontend si quieres restringirlo
+  optionsSuccessStatus: 200
 };
 
+// Habilitar CORS
 app.use(cors(corsOptions));
-app.use(express.json()); // Parseo de JSON
 
-// Sirve la carpeta 'uploads' para los archivos estáticos
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Middleware para parsear el cuerpo de las solicitudes JSON
+app.use(express.json());
 
-// RUTA RAÍZ
+// Rutas
+app.use('/users', UsersRoutes);  // Ruta de usuarios
+app.use('/contacts', ContactsRoutes);  // Ruta de contactos
+
+// Ruta raíz
 app.get('/', (req, res) => {
-    res.send('¡Bienvenido al backend del grupo 31!');
+  res.send('¡Bienvenido al backend del grupo 31!');
 });
 
-// RUTAS DE CONTACTOS
-app.use('/contactos', ContactsRoutes);
+// Servir archivos estáticos (como imágenes)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// RUTA DE USUARIOS
-app.use('/users', UsersRoutes);
-
+// Conexión al servidor
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
-    console.log(`Servidor corriendo en el puerto ${port}`);
+  console.log(`Servidor corriendo en el puerto ${port}`);
 });
